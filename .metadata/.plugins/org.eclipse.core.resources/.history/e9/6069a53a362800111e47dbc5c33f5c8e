@@ -1,0 +1,58 @@
+package in.scalive.votezy.service;
+
+import org.springframework.stereotype.Service;
+
+import in.scalive.votezy.entity.Candidate;
+import in.scalive.votezy.entity.Vote;
+import in.scalive.votezy.entity.Voter;
+import in.scalive.votezy.exception.ResourceNotFoundException;
+import in.scalive.votezy.exception.VoteNotAllowedException;
+import in.scalive.votezy.repository.CandidateRepository;
+import in.scalive.votezy.repository.VoteRepository;
+import in.scalive.votezy.repository.VoterRepository;
+import jakarta.transaction.Transactional;
+
+@Service
+public class VoteService {
+	private VoteRepository voteRepository;
+	private CandidateRepository candidateRepository;
+	private VoterRepository voterRepository;
+	
+	public VoteService(VoteRepository voteRepository, CandidateRepository candidateRepository, VoterRepository voterRepository) {
+		this.voteRepository = voteRepository;
+		this.candidateRepository = candidateRepository;
+		this.voterRepository = voterRepository;
+	}
+	
+	@Transactional
+	public Vote castVote(Integer voterId, Integer candidateId) {
+		//Voter
+		Voter voter = voterRepository.findById(voterId).orElseThrow(() -> new ResourceNotFoundException("Voter not found with id: " + voterId));
+		if(voter.isHasVoted()) {
+			throw new VoteNotAllowedException("Voter ID" + voterId + " has already cast vote");
+		}
+		
+		//Candidate
+		Candidate candidate = candidateRepository.findById(candidateId).orElseThrow(() -> new ResourceNotFoundException("Candidate not found with id: " + candidateId));
+		
+		
+		// Voting logic
+		Vote vote = new Vote();
+		vote.setVoter(voter);
+		vote.setCandidate(candidate);
+		voteRepository.save(vote);
+		
+		
+		// Increase Candidate Count
+		candidate.setVoteCount(candidate.getVoteCount() + 1);
+		candidateRepository.save(candidate);
+		
+		// Mark voter as voted
+		voter.setHasVoted(true);
+		voterRepository.save(voter);
+		
+		// Return Vote object
+		return vote;
+		
+	}
+}

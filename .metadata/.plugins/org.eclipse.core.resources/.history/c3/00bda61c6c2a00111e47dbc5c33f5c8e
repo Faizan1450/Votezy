@@ -1,0 +1,36 @@
+package in.scalive.votezy.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import in.scalive.votezy.dto.ElectionRequestDTO;
+import in.scalive.votezy.dto.ElectionResponseDTO;
+import in.scalive.votezy.entity.ElectionResult;
+import in.scalive.votezy.service.ElectionResultService;
+import jakarta.validation.Valid;
+
+@RestController
+@CrossOrigin
+@RequestMapping("/api/election-result")
+public class ElectionResultController {
+	ElectionResultService electionResultService;
+	public ElectionResultController(ElectionResultService electionResultService) {
+		this.electionResultService = electionResultService;
+	}
+	
+	@PostMapping("/declare")
+	public ResponseEntity<ElectionResponseDTO> declareElectionResult(@RequestBody @Valid ElectionRequestDTO electionRequest){
+		ElectionResult electionResult = electionResultService.declareElectionResult(electionRequest.getElectionName());
+		ElectionResponseDTO electionResponseDTO = new ElectionResponseDTO();
+		electionResponseDTO.setElectionName(electionResult.getElectionName());
+		electionResponseDTO.setTotalVotes(electionResult.getTotalVotes());
+		electionResponseDTO.setWinnerId(electionResult.getWinnerId());
+		electionResponseDTO.setWinnerVoteCount(electionResult.getWinnerCandidate().getVoteCount());
+		return ResponseEntity.ok(electionResponseDTO);
+	}
+}

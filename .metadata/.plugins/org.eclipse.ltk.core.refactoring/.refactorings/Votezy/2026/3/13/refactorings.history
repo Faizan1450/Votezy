@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;in.scalive.votezy.repository.ElectionResultReposioty&apos; to &apos;ElectionResultRepository&apos;&#x0A;- Original project: &apos;Votezy&apos;&#x0A;- Original element: &apos;in.scalive.votezy.repository.ElectionResultReposioty&apos;&#x0A;- Renamed element: &apos;in.scalive.votezy.repository.ElectionResultRepository&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;ElectionResultReposioty&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;in.scalive.votezy.repository{ElectionResultReposioty.java[ElectionResultReposioty" matchStrategy="1" name="ElectionResultRepository" qualified="false" references="true" similarDeclarations="false" stamp="1774439155382" textual="false" version="1.0"/>
+</session>

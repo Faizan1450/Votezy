@@ -1,0 +1,5 @@
+package in.scalive.votezy.controller;
+
+public class ElectionResultController {
+
+}
